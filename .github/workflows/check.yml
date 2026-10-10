@@ -1,0 +1,22 @@
+name: Check plugin
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  syntax-and-package:
+    runs-on: ubuntu-latest
+    container: node:25.2.1
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Check JavaScript syntax
+        run: |
+          for file in lib/*.js; do
+            node --check "$file"
+          done
+      - name: Check package contents
+        run: npm pack --dry-run
