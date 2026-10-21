@@ -1,7 +1,7 @@
 {
   "name": "@local/dsh-telegram-ru",
   "version": "0.3.0",
-  "description": "Русское управление DeepSeek Harness через Telegram: проекты, задачи и результаты",
+  "description": "Control DeepSeek Harness via Telegram in English and Russian: projects, tasks and results. / Управление DeepSeek Harness через Telegram на английском и русском: проекты, задачи и результаты.",
   "keywords": [
     "dsh",
     "deepseek-harness",
@@ -35,7 +35,8 @@
     "lib",
     "LICENSE",
     "cordis.patch.yml",
-    "README.md"
+    "README.md",
+    "README.ru.md"
   ],
   "dsh": {
     "bundle": {

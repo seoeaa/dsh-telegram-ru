@@ -1,32 +1,36 @@
 # dsh-telegram-ru
 
-Русское управление [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) через Telegram: проекты, задачи, история и результаты в одном меню.
+**English** | [Русский](README.ru.md)
 
-Версия `0.3.0` — развитие [Gum97/dsh-telegram](https://github.com/Gum97/dsh-telegram), лицензия MIT. Проверена с Harness **0.2.1-alpha.2**, Node **25.2.1**, Undici **8.10.0**. Минимум Node по зависимости Undici — **22.19.0**. Совместимость с другими версиями Harness отдельно не проверена.
+Control [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) through Telegram in English and Russian: projects, tasks, history and results in one menu.
 
-## Возможности
+Version `0.3.0` builds on [Gum97/dsh-telegram](https://github.com/Gum97/dsh-telegram) under the MIT license. The original integration was verified with Harness **0.2.1-alpha.2**, Node **25.2.1** and Undici **8.10.0**. The English localization and settings card were also checked on Harness **0.2.1-alpha.5**; this does not establish full compatibility with every feature of that version. Undici requires Node **22.19.0** or later. Other Harness versions have not been verified separately.
 
-- Главное меню и описания команд на русском.
-- Выбор проектов из рабочих областей Harness.
-- Просмотр задач проекта, их состояния и последнего завершённого ответа.
-- Продолжение существующих бесед, в том числе созданных в веб-интерфейсе.
-- Новая задача с сохранением предыдущей истории.
-- Выбор модели, пресета новой задачи и разрешений.
-- Остановка текущего ответа и сжатие загруженной истории.
-- Русская карточка **Настройки → Telegram**.
-- Сохранены исходные модули для изображений, документов, потоковых ответов, вопросов и подтверждений.
+## Features
 
-Список завершённых показывает задачи, у которых последний ответ закончился нормально. Это состояние ответа, а не независимая проверка выполнения требований пользователя. Ошибки, остановка и ожидание показываются отдельно.
+- Main menu and command descriptions in English and Russian.
+- Select projects from Harness workspaces.
+- Browse project tasks, their status and their last completed response.
+- Continue existing conversations, including ones created in the Web UI.
+- Create a new task while keeping the previous history.
+- Select a model, a preset for a new task and permissions.
+- Stop the current response and compact loaded conversation history.
+- Settings → Telegram card in English and Russian.
+- Preserve the upstream modules for images, documents, streaming responses, questions and approvals.
 
-## Установка
+The completed list contains tasks whose last response ended normally. This describes the response state; it does not independently verify that the user's requirements were met. Errors, stopped responses and waiting states are shown separately.
 
-Установите плагин в существующий профиль:
+## Installation
+
+Install the plugin into an existing profile:
 
 ```sh
-dsh plugin --profile web add github:seoeaa/dsh-telegram-ru#v0.3.0
+dsh plugin --profile web add github:seoeaa/dsh-telegram-ru#main
 ```
 
-Добавьте **имя пакета** `@local/dsh-telegram-ru` в `dsh.profile.bundles` файла `package.json` вашего профиля. Сохраните остальные используемые bundles. Пример для базового веб-профиля:
+The `main` branch includes English and Russian localization. The older `v0.3.0` tag retains the Russian navigation from before the full English translation was added.
+
+Add the **package name** `@local/dsh-telegram-ru` to `dsh.profile.bundles` in your profile's `package.json`. Keep your other bundles. Example for a basic Web profile:
 
 ```json
 {
@@ -42,19 +46,19 @@ dsh plugin --profile web add github:seoeaa/dsh-telegram-ru#v0.3.0
 }
 ```
 
-Имя `@local/dsh-telegram-ru` сохранено: оно также используется браузерным загрузчиком. Пакет устанавливается с GitHub; одноимённая публикация в npm для этого не требуется.
+The name `@local/dsh-telegram-ru` is retained because the browser module loader also uses it. Installation uses GitHub; a package published under the same name on npm is not required.
 
-Если уже подключён `dsh-telegram`, удалите его из списка bundles и зависимостей профиля перед подключением этого форка. Для одного токена должен работать только один Telegram poller, иначе Telegram вернёт конфликт `409`.
+If `dsh-telegram` is already connected, remove it from your profile's bundles and dependencies before connecting this fork. Only one Telegram poller may use a bot token at a time; otherwise Telegram returns a `409` conflict.
 
-### Настройка доступа и токена
+### Access and bot token
 
-1. Создайте своего бота через `@BotFather`.
-2. До запуска бота задайте свой Telegram user ID и рабочую папку в `cordis.patch.yml` профиля:
+1. Create your own bot through `@BotFather`.
+2. Before starting the bot, set your Telegram user ID and working directory in the profile's `cordis.patch.yml`:
 
 ```yaml
 - id: telegram
   config:
-    language: ru
+    language: en
     allowedUsers:
       - "YOUR_TELEGRAM_USER_ID"
     workspaceRoot: /path/to/project
@@ -62,66 +66,71 @@ dsh plugin --profile web add github:seoeaa/dsh-telegram-ru#v0.3.0
     proxyUrl: ""
 ```
 
-Замените ID и путь собственными значениями. При необходимости укажите в `proxyUrl` адрес своего HTTP-прокси. Пустое значение также позволяет использовать стандартные переменные прокси окружения.
+Replace the ID and path with your own values. If needed, set `proxyUrl` to your HTTP proxy address. An empty value also allows the standard proxy environment variables to be used.
 
-3. Запустите веб-профиль и откройте **Настройки → Telegram**. Сохраните токен бота в соответствующем поле. Он записывается через credentials Harness под ссылкой `TELEGRAM_BOT_TOKEN`; не помещайте его в YAML конфигурации плагина или Git.
-4. Перезапустите профиль после настройки токена. При перезапуске сначала завершите текущие задачи или осознанно остановите их.
-5. В личном чате своего бота отправьте `/menu`.
+3. Start the Web profile and open **Settings → Telegram**. Save the bot token in its field. Harness writes it through its credentials service under the reference `TELEGRAM_BOT_TOKEN`; do not put the token in the plugin's YAML configuration or Git.
+4. Restart the profile after configuring the token. Finish current tasks or deliberately stop them before restarting.
+5. Send `/menu` in a private chat with your bot.
 
-Пустой `allowedUsers` означает, что бот ещё не закреплён за владельцем: первый отправивший `/start` станет владельцем. Для предсказуемой установки рекомендуется явно указать свой ID заранее. Новый пользователь получает доступ к инструментам агента согласно его разрешениям.
+An empty `allowedUsers` list means the bot is unclaimed: the first person to send `/start` becomes its owner. Set your ID explicitly beforehand for a predictable installation. An authorized user can access the agent's tools according to its permissions.
 
-## Использование
+## Usage
 
-**Проекты → проект → Задачи → карточка → Управлять этой задачей** выбирает существующую беседу. Обычное сообщение продолжает её. **Новая задача** создаёт новую беседу в выбранной рабочей папке; старая история сохраняется.
+**Language:** open **Settings → Telegram → Language** in the Web UI, select **English** and press **Save**. The language applies to bot messages, project and task menus, statuses, models, presets, permissions and notifications without restarting Harness. Open a new `/menu` afterwards. Russian remains the default; project names, custom preset names and model responses are kept as supplied. Telegram's command list has an English default and separate `en`/`ru` versions selected by the Telegram client's language.
 
-**Завершённые → карточка → Посмотреть итог** показывает полный текст последнего завершённого ответа. Длинный итог разбивается на сообщения. Списки страниц содержат по восемь задач; в меню завершённых фильтр применяется к текущей странице общей истории.
+**Projects → project → Tasks → task card → Control this task** selects an existing conversation. A regular message continues it. **New task** creates a conversation in the selected working directory while keeping the old history.
 
-| Команда | Действие |
+**Completed → task card → View result** shows the full text of the last completed response. Long results are split into multiple messages. Task lists contain eight tasks per page; the completed menu filters the current page of the full history.
+
+| Command | Action |
 |---|---|
-| `/menu`, `/start` | Главное меню |
-| `/projects` | Выбрать проект |
-| `/tasks` | Задачи выбранного проекта |
-| `/done` | Завершённые ответы |
-| `/result` | Итог выбранной задачи |
-| `/new`, `/clear` | Новая беседа с сохранением старой |
-| `/model` | Выбрать модель |
-| `/preset` | Выбрать режим для следующей новой задачи |
-| `/mode` | Разрешения выбранной задачи |
-| `/status` | Состояние выбранной задачи |
-| `/stop` | Запросить остановку текущего ответа |
-| `/compact` | Сжать загруженную беседу, если её пресет предоставляет compaction |
-| `/help` | Список команд |
+| `/menu`, `/start` | Main menu |
+| `/projects` | Select a project |
+| `/tasks` | Tasks in the selected project |
+| `/done` | Completed responses |
+| `/result` | Selected task result |
+| `/new`, `/clear` | New conversation, keeping the previous one |
+| `/model` | Select a model |
+| `/preset` | Select a preset for the next new task |
+| `/mode` | Selected task permissions |
+| `/status` | Selected task state |
+| `/stop` | Request to stop the current response |
+| `/compact` | Compact a loaded conversation if its preset provides compaction |
+| `/help` | List commands |
 
-Изменение модели или разрешений для незагруженной задачи применяется при её продолжении. Пресет применяется к следующей новой задаче. Меню действует десять минут и привязано к пользователю, чату и теме; после перезапуска или обновления откройте новое `/menu`.
+A model or permission change for an unloaded task is applied when that task resumes. A preset applies to the next new task. Menus expire after ten minutes and belong to a specific user, chat and topic. Open a new `/menu` after a restart or update.
 
-## Проверка и ограничения
+## Verification and limitations
 
-В работающем Harness проверены авторизация Bot API, русские default/ru команды, отправка меню, выбор проекта и существующей задачи, чтение результата, меню моделей и пресетов, изменение модели и разрешений. Новая короткая задача и продолжение той же сохранённой сессии завершились ожидаемым ответом. В Chromium проверены загрузка Web, русская карточка, чтение и сохранение настроек без ошибок.
+The English localization was checked separately with 28 local command scenarios across both languages, capturing outgoing messages; matching 207 English/Russian keys and their placeholders; callback ownership and replay checks; and tool activity and failure notifications. Chromium on Harness `0.2.1-alpha.5` verified the English option and English settings labels without JavaScript errors; the original Russian setting was preserved. The plugin was activated without restarting Harness. These checks sent no messages to users and did not run a model.
 
-Для интеграционной проверки входящие события и нажатия программно подавались обработчику плагина; исходящие сообщения отправлялись настоящим Bot API. Проверка не подтверждает нажатия на физическом телефоне или прохождение входящего события именно через клиент Telegram. Отдельно не проверялись остановка занятого агента, реальное сжатие длинной истории и все модельные провайдеры. Новые unit tests не создавались.
+Earlier checks in a running Harness verified Bot API authentication, Russian default/ru commands, menu delivery, project and existing-task selection, result retrieval, model and preset menus, and model and permission changes. A short new task and continuation of the same saved session returned the expected response. Chromium verified Web loading, the Russian card, and reading and saving settings without errors.
 
-CI проверяет синтаксис JavaScript и состав npm-пакета. Приватные сообщения, история, токены и персональные настройки в репозиторий не включены.
+For that earlier integration check, incoming updates and button presses were submitted programmatically to the plugin handler; outgoing messages used the real Bot API. This does not verify physical-phone interactions or an incoming update sent through the Telegram client. Stopping a busy agent, compacting a long history and all model providers have not been separately verified. No new unit tests were created.
 
-## Разработка
+CI checks JavaScript syntax and npm package contents. Private messages, history, tokens and personal settings are excluded from the repository.
 
-Серверные модули — обычный ESM JavaScript в `lib/`. `lib/client.js` — готовая браузерная сборка с внешними React и модулями Harness. Шага сборки из исходного TSX в этом репозитории нет: изменяйте и проверяйте поставляемый модуль, не запускайте несуществующий `build:client`.
+## Development
 
-- `navigation.js` — проекты, задачи, состояния, результаты и callbacks.
-- `commands.js` — команды и выбор настроек агента.
-- `index.js` — подключение, входящие сообщения и жизненный цикл сессий.
-- `settings.js`, `client.js` — настройки Host и Web.
-- `api.js` — Bot API, прокси, polling и ограничения доставки.
-- Остальные модули — медиа, ответы, вопросы и подтверждения.
+Server modules are plain ESM JavaScript in `lib/`. `lib/client.js` is a prebuilt browser bundle with external React and Harness modules. This repository has no build step from TSX sources: edit and check the shipped module; there is no `build:client` script.
 
-Для проверки без обращения к боту:
+- `navigation.js` — projects, tasks, states, results and callbacks.
+- `commands.js` — commands and agent setting choices.
+- `index.js` — connection, incoming updates and session lifecycle.
+- `settings.js`, `client.js` — Host and Web settings.
+- `api.js` — Bot API, proxies, polling and delivery limits.
+- `i18n.js` — message, command and navigation dictionaries.
+- Other modules — media, replies, questions and approvals.
+
+Check without contacting a bot:
 
 ```sh
 for file in lib/*.js; do node --check "$file"; done
 npm pack --dry-run
 ```
 
-Для исправления API сначала сверяйтесь с установленной версией Harness. Особенно важны имя сервиса `agentPresets`, `sessionController.selectModel`, `permissionPresets.set`, volatile Config и имя регистрации браузерного пакета. Для прокси используйте fetch и ProxyAgent из одной версии Undici.
+Before changing API integration, check the installed Harness version. Relevant integration points include the `agentPresets` service, `sessionController.selectModel`, `permissionPresets.set`, volatile Config and the browser package registration name. Use fetch and ProxyAgent from the same Undici version for proxy support.
 
-## Лицензия
+## License
 
-[MIT](LICENSE). Исходный автор: Gum97. Русское меню, общая навигация по проектам/задачам и адаптация для указанной alpha-версии поддерживаются в этом репозитории.
+[MIT](LICENSE). Original author: Gum97. This repository maintains the Russian and English menus, shared project/task navigation and integration with the alpha versions described above.
